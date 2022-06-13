@@ -20,7 +20,7 @@ def B(eta):
 def string_to_bits(s):
     bits_message = []
     for letter in s:
-        for i in range(7, -1, -1):
+        for i in range(6, -1, -1):
             bits_message.append(ord(letter)>>i & 1)
     return bits_message
 
@@ -28,12 +28,12 @@ def bits_to_string(b):
     s = []
     if len(b)==0:
         return ""
-    sub = b[:8]
+    sub = b[:7]
     i=0
-    while not (sub == [0]*8) and i < len(b)//8:
+    while not (sub == [0]*7) and i < len(b)//7:
         s.append(chr(int(''.join(str(item) for item in sub), 2)))
         i+=1      
-        sub = b[8*i:8*i+8]   
+        sub = b[7*i:7*i+7]   
     return "".join(s)
 
 def map_q_to_01(polynomial):
@@ -70,10 +70,10 @@ def generate_keys():
 def encrypt(message, pk):
     A, t = pk
     if type(message) == str:
-        message = [string_to_bits(message[i:i+32]) for i in range(0, len(message), 32)]
-    else:
-        message = list(message)
-        message = [message[i:i+256] for i in range(0, len(message), 256)]
+        message = string_to_bits(message)
+    
+    message = list(message)
+    message = [message[i:i+256] for i in range(0, len(message), 256)]
     u, v = [], []
     r = vector(R, k, [R([(B(eta1)) for _ in range(n)]) for _ in range(k)])
     e_1 = vector(R, k, [R([(B(eta2)) for _ in range(n)]) for _ in range(k)])
@@ -94,4 +94,5 @@ def decrypt(u, v, sk, for_pc = False):
     if for_pc:
         return np.array([bit for submessage in message for bit in submessage])
     else:
-        return "".join(bits_to_string(submessage) for submessage in message)
+        all_messages = [bit for submessage in message for bit in submessage]
+        return "".join(bits_to_string(bits) for bits in [message[i:i+7] for i in range(0, len(message), 7)])
