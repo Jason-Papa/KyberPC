@@ -95,4 +95,4 @@ def decrypt(u, v, sk, for_pc = False):
         return np.array([bit for submessage in message for bit in submessage])
     else:
         all_messages = [bit for submessage in message for bit in submessage]
-        return "".join(bits_to_string(bits) for bits in [message[i:i+7] for i in range(0, len(message), 7)])
+        return "".join([bits_to_string(bits) for bits in [all_messages[i:i+7] for i in range(0, len(all_messages), 7)] ])
