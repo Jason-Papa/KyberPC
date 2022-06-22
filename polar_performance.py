@@ -4,11 +4,11 @@ import time
 # initialise polar code
 
 start_time = time.time()
-PC = PolarCode(256, 256)
+PC = PolarCode(256, 144)
 PC.construction_type = 'bb'
 
 # mothercode construction
-design_SNR  = 65.1
+design_SNR  = 37.55
 Construct(PC, design_SNR)
 
 m = np.random.randint(2, size=PC.K)
